@@ -1,5 +1,5 @@
 setup:
-	@docker build . -t kubernetes-tools-docker
+	@docker build . -t kubernetes-tools
 
 run:
-	@docker run --rm -it --entrypoint /bin/bash kubernetes-tools-docker
+	@docker run --rm -it --entrypoint /bin/sh kubernetes-tools
