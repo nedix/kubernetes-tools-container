@@ -49,6 +49,18 @@ RUN source .env \
     && chmod +x kfilt \
     && apk del .build-deps
 
+FROM build-env as kubectl
+
+ARG KUBECTL_VERSION=1.28.1
+
+RUN source .env \
+    && apk add --virtual .build-deps \
+        curl \
+    && curl -sLO https://dl.k8s.io/v${KUBECTL_VERSION}/kubernetes-client-linux-${ARCHITECTURE}.tar.gz \
+    && tar xfO kubernetes-client-linux-${ARCHITECTURE}.tar.gz kubernetes/client/bin/kubectl > kubectl \
+    && chmod +x kubectl \
+    && apk del .build-deps
+
 FROM build-env as kustomize
 
 ARG KUSTOMIZE_VERSION=5.0.1
@@ -70,6 +82,7 @@ RUN apk add \
 COPY --link --from=argocd /build/argocd /usr/local/bin/argocd
 COPY --link --from=helm /build/helm /usr/local/bin/helm
 COPY --link --from=kfilt /build/kfilt /usr/local/bin/kfilt
+COPY --link --from=kubectl /build/kubectl /usr/local/bin/kubectl
 COPY --link --from=kustomize /build/kustomize /usr/local/bin/kustomize
 
 WORKDIR /
