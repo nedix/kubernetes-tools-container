@@ -86,14 +86,16 @@ RUN source .env \
 
 FROM --platform=$BUILDPLATFORM alpine:3.18
 
-COPY --link --chown=nobody --from=argocd /build/argocd /usr/local/bin/argocd
-COPY --link --chown=nobody --from=helm /build/helm /usr/local/bin/helm
-COPY --link --chown=nobody --from=kfilt /build/kfilt /usr/local/bin/kfilt
-COPY --link --chown=nobody --from=krew /opt/krew /opt/krew
-COPY --link --chown=nobody --from=kubectl /build/kubectl /usr/local/bin/kubectl
-COPY --link --chown=nobody --from=kustomize /build/kustomize /usr/local/bin/kustomize
-COPY --link --chown=nobody --from=yq /build/yq /usr/local/bin/yq
+COPY --chown=nobody --from=argocd /build/argocd /usr/local/bin/argocd
+COPY --chown=nobody --from=helm /build/helm /usr/local/bin/helm
+COPY --chown=nobody --from=kfilt /build/kfilt /usr/local/bin/kfilt
+COPY --chown=nobody --from=krew /opt/krew /opt/krew
+COPY --chown=nobody --from=kubectl /build/kubectl /usr/local/bin/kubectl
+COPY --chown=nobody --from=kustomize /build/kustomize /usr/local/bin/kustomize
+COPY --chown=nobody --from=yq /build/yq /usr/local/bin/yq
 
 COPY --chown=nobody rootfs /
+
+USER nobody
 
 ENV ENV /etc/profile
