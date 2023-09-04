@@ -42,6 +42,21 @@ RUN source .env \
     && curl -sSL https://github.com/ryane/kfilt/releases/download/v${KFILT_VERSION}/kfilt_${KFILT_VERSION}_linux_${ARCHITECTURE} -o kfilt \
     && chmod +x kfilt
 
+FROM build-env as krew
+
+ARG KREW_VERSION=0.4.4
+
+RUN source .env \
+    && apk add --virtual .krew-build-deps \
+        git \
+    && curl -sSL https://github.com/kubernetes-sigs/krew/releases/download/v${KREW_VERSION}/krew-linux_${ARCHITECTURE}.tar.gz \
+    | tar xzOf - ./krew-linux_${ARCHITECTURE} > krew \
+    && chmod +x krew \
+    && export KREW_ROOT=/opt/krew \
+    && ./krew install --manifest-url=https://github.com/kubernetes-sigs/krew/releases/download/v${KREW_VERSION}/krew.yaml \
+    && rm krew \
+    && apk del .krew-build-deps
+
 FROM build-env as kubectl
 
 ARG KUBECTL_VERSION=1.28.1
@@ -71,11 +86,14 @@ RUN source .env \
 
 FROM --platform=$BUILDPLATFORM alpine:3.18
 
-COPY --link --from=argocd /build/argocd /usr/local/bin/argocd
-COPY --link --from=helm /build/helm /usr/local/bin/helm
-COPY --link --from=kfilt /build/kfilt /usr/local/bin/kfilt
-COPY --link --from=kubectl /build/kubectl /usr/local/bin/kubectl
-COPY --link --from=kustomize /build/kustomize /usr/local/bin/kustomize
-COPY --link --from=yq /build/yq /usr/local/bin/yq
+COPY --link --chown=nobody --from=argocd /build/argocd /usr/local/bin/argocd
+COPY --link --chown=nobody --from=helm /build/helm /usr/local/bin/helm
+COPY --link --chown=nobody --from=kfilt /build/kfilt /usr/local/bin/kfilt
+COPY --link --chown=nobody --from=krew /opt/krew /opt/krew
+COPY --link --chown=nobody --from=kubectl /build/kubectl /usr/local/bin/kubectl
+COPY --link --chown=nobody --from=kustomize /build/kustomize /usr/local/bin/kustomize
+COPY --link --chown=nobody --from=yq /build/yq /usr/local/bin/yq
 
-WORKDIR /
+COPY --chown=nobody rootfs /
+
+ENV ENV /etc/profile

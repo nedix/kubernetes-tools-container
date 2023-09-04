@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+export KREW_ROOT=${KREW_ROOT:-/opt/krew}
+
+if [ "$1" = "install" ] && ! echo "$@" | grep -q -- "--no-update-index"; then
+    shift
+    /opt/krew/bin/kubectl-krew install --no-update-index "$@"
+else
+    /opt/krew/bin/kubectl-krew "$@"
+fi
