@@ -1,4 +1,7 @@
-FROM --platform=$BUILDPLATFORM alpine:3.18 as build-env
+ARG TARGET=alpine
+ARG ALPINE_VERSION=3.18
+
+FROM --platform=$BUILDPLATFORM alpine:$ALPINE_VERSION as build-env
 
 ARG ARCHITECTURE
 
@@ -84,18 +87,22 @@ RUN source .env \
     | tar xzOf - ./yq_linux_${ARCHITECTURE} > yq \
     && chmod +x yq
 
-FROM --platform=$BUILDPLATFORM alpine:3.18
+FROM --platform=$BUILDPLATFORM scratch as target_scratch
 
-COPY --chown=nobody --from=argocd /build/argocd /usr/local/bin/argocd
-COPY --chown=nobody --from=helm /build/helm /usr/local/bin/helm
-COPY --chown=nobody --from=kfilt /build/kfilt /usr/local/bin/kfilt
-COPY --chown=nobody --from=krew /opt/krew /opt/krew
-COPY --chown=nobody --from=kubectl /build/kubectl /usr/local/bin/kubectl
-COPY --chown=nobody --from=kustomize /build/kustomize /usr/local/bin/kustomize
-COPY --chown=nobody --from=yq /build/yq /usr/local/bin/yq
+COPY --link --from=argocd /build/argocd /usr/local/bin/argocd
+COPY --link --from=helm /build/helm /usr/local/bin/helm
+COPY --link --from=kfilt /build/kfilt /usr/local/bin/kfilt
+COPY --link --from=krew /opt/krew /opt/krew
+COPY --link --from=kubectl /build/kubectl /usr/local/bin/kubectl
+COPY --link --from=kustomize /build/kustomize /usr/local/bin/kustomize
+COPY --link --from=yq /build/yq /usr/local/bin/yq
 
-COPY --chown=nobody rootfs /
+COPY --link rootfs /
 
-USER nobody
+FROM --platform=$BUILDPLATFORM alpine:$ALPINE_VERSION as target_alpine
+
+COPY --link --from=target_scratch / /
 
 ENV ENV /etc/profile
+
+FROM --platform=$BUILDPLATFORM target_${TARGET}

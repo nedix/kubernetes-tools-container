@@ -10,6 +10,20 @@ jobs:
   build-and-push-docker-image:
     name: Build image and push to container registry
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target:
+          - alpine
+        alpine_version:
+          - 3.16
+          - 3.17
+          - 3.18
+        include:
+          - target: scratch
+            alpine_version: 3.18
+            latest: true
+          - alpine_version: 3.18
+            latest: true
 
     steps:
       - name: Checkout code
@@ -29,11 +43,16 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build image and push to container registry
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: .
+          build-args: TARGET=${{ matrix.target }}
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:${{ github.ref_name}}
-            ghcr.io/${{ github.repository }}:latest
+            ${{ matrix.target == 'alpine' && format('ghcr.io/{0}:{1}-{2}{3}', github.repository, github.ref_name, matrix.target, matrix.alpine_version) || '' }}
+            ${{ matrix.target == 'alpine' && format('ghcr.io/{0}:{1}-{2}{3}', github.repository, github.ref_name, matrix.target, matrix.alpine_version) || '' }}
+            ${{ matrix.latest == true && format('ghcr.io/{0}:{1}-{2}', github.repository, github.ref_name, matrix.target) || '' }}
+            ${{ matrix.latest == true && format('ghcr.io/{0}:{1}-{2}', github.repository, 'latest', matrix.target) || '' }}
+            ${{ matrix.latest == true && matrix.target == 'alpine' && format('ghcr.io/{0}:{1}', github.repository, github.ref_name) || '' }}
+            ${{ matrix.latest == true && matrix.target == 'alpine' && format('ghcr.io/{0}:{1}', github.repository, 'latest') || '' }}
