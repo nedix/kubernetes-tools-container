@@ -48,7 +48,7 @@
       fileMatch: ["^Dockerfile$"],
       matchStrings: ["ARG YQ_VERSION=(?<currentValue>.*?)\\n"],
       datasourceTemplate: "github-releases",
-      depNameTemplate: "kubernetes-sigs/kustomize"
+      depNameTemplate: "mikefarah/yq"
     }
   ]
 }
