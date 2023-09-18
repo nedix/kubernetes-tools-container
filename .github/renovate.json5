@@ -1,0 +1,54 @@
+{
+  baseBranches: [
+    "main",
+    "/^release\\/.*/",
+  ],
+  enabledManagers: [
+    "regex",
+  ],
+  regexManagers: [
+    {
+      fileMatch: ["^Dockerfile$"],
+      matchStrings: ["ARG ARGOCD_VERSION=(?<currentValue>.*?)\\n"],
+      datasourceTemplate: "github-releases",
+      depNameTemplate: "argoproj/argo-cd"
+    },
+    {
+      fileMatch: ["^Dockerfile$"],
+      matchStrings: ["ARG HELM_VERSION=(?<currentValue>.*?)\\n"],
+      datasourceTemplate: "github-releases",
+      depNameTemplate: "helm/helm"
+    },
+    {
+      fileMatch: ["^Dockerfile$"],
+      matchStrings: ["ARG KFILT_VERSION=(?<currentValue>.*?)\\n"],
+      datasourceTemplate: "github-releases",
+      depNameTemplate: "ryane/kfilt"
+    },
+    {
+      fileMatch: ["^Dockerfile$"],
+      matchStrings: ["ARG KREW_VERSION=(?<currentValue>.*?)\\n"],
+      datasourceTemplate: "github-releases",
+      depNameTemplate: "kubernetes-sigs/krew"
+    },
+    {
+      fileMatch: ["^Dockerfile$"],
+      matchStrings: ["ARG KUBECTL_VERSION=(?<currentValue>.*?)\\n"],
+      datasourceTemplate: "docker",
+      depNameTemplate: "kubectl",
+      registryUrlTemplate: "https://registry.k8s.io"
+    },
+    {
+      fileMatch: ["^Dockerfile$"],
+      matchStrings: ["ARG KUSTOMIZE_VERSION=(?<currentValue>.*?)\\n"],
+      datasourceTemplate: "github-releases",
+      depNameTemplate: "kubernetes-sigs/kustomize"
+    },
+    {
+      fileMatch: ["^Dockerfile$"],
+      matchStrings: ["ARG YQ_VERSION=(?<currentValue>.*?)\\n"],
+      datasourceTemplate: "github-releases",
+      depNameTemplate: "kubernetes-sigs/kustomize"
+    }
+  ]
+}
