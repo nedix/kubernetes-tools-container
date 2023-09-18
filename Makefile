@@ -6,5 +6,5 @@ run:
 	@docker run --rm -it kubernetes-tools
 
 test:
-	@(MAKE) setup
+	@$(MAKE) setup
 	@$(CURDIR)/tests/feature/all.sh
