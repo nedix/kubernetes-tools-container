@@ -43,4 +43,5 @@ jobs:
           RENOVATE_AUTODISCOVER: true
           RENOVATE_AUTODISCOVER_FILTER: ${{ github.repository }}
           RENOVATE_AUTOMERGE: true
+          RENOVATE_AUTOMERGE_STRATEGY: merge-commit
           RENOVATE_PR_HOURLY_LIMIT: 0

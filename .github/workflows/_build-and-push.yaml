@@ -11,16 +11,7 @@ jobs:
       matrix:
         target:
           - alpine
-        alpine_version:
-          - 3.16
-          - 3.17
-          - 3.18
-        include:
-          - target: scratch
-            alpine_version: 3.18
-            latest: true
-          - alpine_version: 3.18
-            latest: true
+          - scratch
 
     steps:
       - name: Checkout code
@@ -46,6 +37,7 @@ jobs:
         id: tags
         run: |
           git fetch --all --tags
+          echo "ALPINE_VERSION=$(sed -n 's/ARG ALPINE_VERSION=\(.*\)/\1/p' Dockerfile)" >> $GITHUB_OUTPUT
           echo "DIGEST=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
           echo "REF_NAME=$(git tag --points-at HEAD)" >> $GITHUB_OUTPUT
 
@@ -57,11 +49,11 @@ jobs:
           push: true
           target: target-${{ matrix.target }}
           tags: |
-            ${{ matrix.target == 'alpine' && format('ghcr.io/{0}:{1}-{2}{3}', github.repository, steps.tags.outputs.REF_NAME, matrix.target, matrix.alpine_version) || '' }}
-            ${{ matrix.target == 'alpine' && format('ghcr.io/{0}:{1}-{2}{3}', github.repository, steps.tags.outputs.REF_NAME, matrix.target, matrix.alpine_version) || '' }}
-            ${{ matrix.latest == true && format('ghcr.io/{0}:{1}-{2}', github.repository, steps.tags.outputs.DIGEST, matrix.target) || '' }}
-            ${{ matrix.latest == true && format('ghcr.io/{0}:{1}-{2}', github.repository, steps.tags.outputs.REF_NAME, matrix.target) || '' }}
-            ${{ matrix.latest == true && format('ghcr.io/{0}:{1}-{2}', github.repository, 'latest', matrix.target) || '' }}
-            ${{ matrix.latest == true && matrix.target == 'alpine' && format('ghcr.io/{0}:{1}', github.repository, steps.tags.outputs.DIGEST) || '' }}
-            ${{ matrix.latest == true && matrix.target == 'alpine' && format('ghcr.io/{0}:{1}', github.repository, steps.tags.outputs.REF_NAME) || '' }}
-            ${{ matrix.latest == true && matrix.target == 'alpine' && format('ghcr.io/{0}:{1}', github.repository, 'latest') || '' }}
+            ${{ matrix.target == 'alpine' && format('ghcr.io/{0}:{1}-{2}{3}', github.repository, steps.tags.outputs.REF_NAME, matrix.target, steps.tags.outputs.ALPINE_VERSION) || '' }}
+            ${{ matrix.target == 'alpine' && format('ghcr.io/{0}:{1}-{2}{3}', github.repository, steps.tags.outputs.REF_NAME, matrix.target, steps.tags.outputs.ALPINE_VERSION) || '' }}
+            ${{ matrix.target == 'alpine' && format('ghcr.io/{0}:{1}', github.repository, steps.tags.outputs.DIGEST) || '' }}
+            ${{ matrix.target == 'alpine' && format('ghcr.io/{0}:{1}', github.repository, steps.tags.outputs.REF_NAME) || '' }}
+            ${{ matrix.target == 'alpine' && format('ghcr.io/{0}:{1}', github.repository, 'latest') || '' }}
+            ${{ format('ghcr.io/{0}:{1}-{2}', github.repository, steps.tags.outputs.DIGEST, matrix.target) }}
+            ${{ format('ghcr.io/{0}:{1}-{2}', github.repository, steps.tags.outputs.REF_NAME, matrix.target) }}
+            ${{ format('ghcr.io/{0}:{1}-{2}', github.repository, 'latest', matrix.target) }}

@@ -9,6 +9,12 @@
   regexManagers: [
     {
       fileMatch: ["^Dockerfile$"],
+      matchStrings: ["ARG ALPINE_VERSION=(?<currentValue>.*?)\\n"],
+      datasourceTemplate: "docker",
+      depNameTemplate: "alpine",
+    },
+    {
+      fileMatch: ["^Dockerfile$"],
       matchStrings: ["ARG ARGOCD_VERSION=(?<currentValue>.*?)\\n"],
       datasourceTemplate: "github-releases",
       depNameTemplate: "argoproj/argo-cd"
@@ -50,5 +56,12 @@
       datasourceTemplate: "github-releases",
       depNameTemplate: "mikefarah/yq"
     }
-  ]
+  ],
+  packageRules: [
+    {
+      description: "Disable grouping for regex managed dependencies",
+      matchDepTypes: ["regex"],
+      groupName: null
+    }
+  ],
 }
