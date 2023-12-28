@@ -1,10 +1,10 @@
-name: Feature testing
+name: Testing
 
 on:
   workflow_call:
 
 jobs:
-  feature:
+  e2e:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,5 +20,6 @@ jobs:
       - name: Build image and run tests
         shell: bash
         run: |
+          set -e
           docker build . --target=target-alpine --tag=kubernetes-tools
-          ./tests/feature/all.sh
+          ./tests/e2e/all.sh

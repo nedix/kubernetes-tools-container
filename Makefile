@@ -7,4 +7,4 @@ run:
 
 test:
 	@$(MAKE) setup
-	@$(CURDIR)/tests/feature/all.sh
+	@$(CURDIR)/tests/e2e/all.sh
