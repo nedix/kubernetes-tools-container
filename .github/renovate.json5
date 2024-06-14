@@ -4,64 +4,73 @@
     "/^release\\/.*/",
   ],
   enabledManagers: [
-    "regex",
+    "custom.regex",
+    "github-actions",
   ],
-  regexManagers: [
+  customManagers: [
     {
+      depNameTemplate: "Alpine",
       fileMatch: ["^Dockerfile$"],
       matchStrings: ["ARG ALPINE_VERSION=(?<currentValue>.*?)\\n"],
       datasourceTemplate: "docker",
-      depNameTemplate: "alpine",
+      packageNameTemplate: "alpine",
     },
     {
+      depNameTemplate: "Argo CD",
       fileMatch: ["^Dockerfile$"],
       matchStrings: ["ARG ARGOCD_VERSION=(?<currentValue>.*?)\\n"],
       datasourceTemplate: "github-releases",
-      depNameTemplate: "argoproj/argo-cd"
+      packageNameTemplate: "argoproj/argo-cd",
     },
     {
+      depNameTemplate: "Helm",
       fileMatch: ["^Dockerfile$"],
       matchStrings: ["ARG HELM_VERSION=(?<currentValue>.*?)\\n"],
       datasourceTemplate: "github-releases",
-      depNameTemplate: "helm/helm"
+      packageNameTemplate: "helm/helm",
     },
     {
+      depNameTemplate: "Kfilt",
       fileMatch: ["^Dockerfile$"],
       matchStrings: ["ARG KFILT_VERSION=(?<currentValue>.*?)\\n"],
       datasourceTemplate: "github-releases",
-      depNameTemplate: "ryane/kfilt"
+      packageNameTemplate: "ryane/kfilt",
     },
     {
+      depNameTemplate: "Krew",
       fileMatch: ["^Dockerfile$"],
       matchStrings: ["ARG KREW_VERSION=(?<currentValue>.*?)\\n"],
       datasourceTemplate: "github-releases",
-      depNameTemplate: "kubernetes-sigs/krew"
+      packageNameTemplate: "kubernetes-sigs/krew",
     },
     {
+      depNameTemplate: "Kubectl",
       fileMatch: ["^Dockerfile$"],
       matchStrings: ["ARG KUBECTL_VERSION=(?<currentValue>.*?)\\n"],
       datasourceTemplate: "docker",
-      depNameTemplate: "kubectl",
-      registryUrlTemplate: "https://registry.k8s.io"
+      packageNameTemplate: "kubectl",
+      registryUrlTemplate: "https://registry.k8s.io",
     },
     {
+      depNameTemplate: "Kustomize",
       fileMatch: ["^Dockerfile$"],
       matchStrings: ["ARG KUSTOMIZE_VERSION=(?<currentValue>.*?)\\n"],
       datasourceTemplate: "github-releases",
-      depNameTemplate: "kubernetes-sigs/kustomize"
+      packageNameTemplate: "kubernetes-sigs/kustomize",
     },
     {
+      depNameTemplate: "YQ",
       fileMatch: ["^Dockerfile$"],
       matchStrings: ["ARG YQ_VERSION=(?<currentValue>.*?)\\n"],
       datasourceTemplate: "github-releases",
-      depNameTemplate: "mikefarah/yq"
-    }
+      packageNameTemplate: "mikefarah/yq",
+    },
   ],
   packageRules: [
     {
-      description: "Disable grouping for regex managed dependencies",
-      matchDepTypes: ["regex"],
-      groupName: null
-    }
+      description: "Disable grouping for all dependencies",
+      matchPackagePatterns: [".*"],
+      groupName: null,
+    },
   ],
 }
