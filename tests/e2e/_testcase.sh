@@ -3,7 +3,7 @@
 function test_runner() {
     set -e
     echo "Testing '${1##*/}'..."
-    docker run --rm -t kubernetes-tools $@ > /dev/null
+    docker run --rm -t test $@ > /dev/null
     echo "Good exit from '${1##*/}'."
 }
 
