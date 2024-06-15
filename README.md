@@ -1,46 +1,32 @@
 # kubernetes-tools-docker
 
-Utilities to work with Kubernetes manifests. The images come in two flavors: Alpine and scratch.
+A docker layer that contains tools to work with Kubernetes manifests.
 
 ## Usage
 
-#### From alpine
+### Copy the Docker layer
 
 ```dockerfile
 ARG TOOLS_VERSION=latest
 
-FROM ghcr.io/nedix/kubernetes-tools-docker:${TOOLS_VERSION}
-```
+FROM ghcr.io/nedix/kubernetes-tools-docker:${TOOLS_VERSION} as tools
 
-or
-
-```dockerfile
-ARG TOOLS_VERSION=latest
-ARG ALPINE_VERSION # optional
-
-FROM ghcr.io/nedix/kubernetes-tools-docker:${TOOLS_VERSION}-alpine${ALPINE_VERSION}
-```
-
-#### From scratch
-
-```dockerfile
-ARG TOOLS_VERSION=latest
-ARG ALPINE_VERSION=3.18
-
-FROM ghcr.io/nedix/kubernetes-tools-docker:${TOOLS_VERSION}-scratch as tools
-
-FROM alpine:${ALPINE_VERSION}
+FROM alpine
 
 COPY --chown=nobody --from=tools / /
 
 ENV ENV /etc/profile
 ```
 
-<hr>
-
 ## Attribution
 
-Powered by [Argo CD], [Helm], [kfilt], [krew], [kubectl], [kustomize] and [yq].
+- [Argo CD] ([License](https://raw.githubusercontent.com/argoproj/argo-cd/master/LICENSE))
+- [Helm] ([License](https://raw.githubusercontent.com/helm/helm/main/LICENSE))
+- [kfilt] ([License](https://raw.githubusercontent.com/ryane/kfilt/main/LICENSE))
+- [krew] ([License](https://raw.githubusercontent.com/kubernetes-sigs/krew/master/LICENSE))
+- [kubectl] ([License](https://raw.githubusercontent.com/kubernetes/kubectl/master/LICENSE))
+- [kustomize] ([License](https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/LICENSE))
+- [yq] ([License](https://raw.githubusercontent.com/mikefarah/yq/master/LICENSE))
 
 [Argo CD]: https://github.com/argoproj/argo-cd
 [Helm]: https://github.com/helm/helm
