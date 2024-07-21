@@ -1,22 +1,27 @@
 # kubernetes-tools-docker
 
-A docker layer that contains tools to work with Kubernetes manifests.
+A container that contains commandline tools to work with Kubernetes resources.
 
 ## Usage
 
-### Copy the Docker layer
+**Run the container**
 
-```dockerfile
-ARG TOOLS_VERSION=latest
-
-FROM ghcr.io/nedix/kubernetes-tools-docker:${TOOLS_VERSION} as tools
-
-FROM alpine
-
-COPY --chown=nobody --from=tools / /
-
-ENV ENV /etc/profile
+```shell
+docker run --pull always --rm --name kubernetes-tools \
+    --mount type=bind,source=<path to kubeconfig>,target=/mnt/kubeconfig.yaml,ro \
+    ghcr.io/nedix/kubernetes-tools-docker
 ```
+
+**Use any of the commands**
+
+- `argocd`
+- `helm`
+- `kfilt`
+- `kubectl`
+- `kubectl export`
+- `kubectl krew`
+- `kustomize`
+- `yq`
 
 ## Attribution
 
