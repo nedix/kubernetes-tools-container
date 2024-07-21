@@ -1,13 +1,14 @@
+ARG ARCHITECTURE
 ARG ALPINE_VERSION=3.20
-ARG ARGOCD_VERSION=v2.11.5
-ARG HELM_VERSION=v3.15.3
+ARG ARGOCD_VERSION=2.11.5
+ARG HELM_VERSION=3.15.3
 ARG KFILT_VERSION=0.0.8
-ARG KREW_VERSION=v0.4.4
-ARG KUBECTL_VERSION=v1.30.3
-ARG KUSTOMIZE_VERSION=v5.0.1
-ARG YQ_VERSION=v4.44.2
+ARG KREW_VERSION=0.4.4
+ARG KUBECTL_VERSION=1.30.3
+ARG KUSTOMIZE_VERSION=5.0.1
+ARG YQ_VERSION=4.44.2
 
-FROM --platform=$BUILDPLATFORM alpine:$ALPINE_VERSION as build-env
+FROM alpine:${ALPINE_VERSION} as build-env
 
 ARG ARCHITECTURE
 
@@ -31,7 +32,7 @@ FROM build-env as argocd
 ARG ARGOCD_VERSION
 
 RUN source .env \
-    && curl -fsSL https://github.com/argoproj/argo-cd/releases/download/${ARGOCD_VERSION}/argocd-linux-${ARCHITECTURE} -o argocd \
+    && curl -fsSL https://github.com/argoproj/argo-cd/releases/download/v${ARGOCD_VERSION}/argocd-linux-${ARCHITECTURE} -o argocd \
     && chmod +x argocd
 
 FROM build-env as helm
@@ -39,7 +40,7 @@ FROM build-env as helm
 ARG HELM_VERSION
 
 RUN source .env \
-    && curl -fsSL https://get.helm.sh/helm-${HELM_VERSION}-linux-${ARCHITECTURE}.tar.gz \
+    && curl -fsSL https://get.helm.sh/helm-v${HELM_VERSION}-linux-${ARCHITECTURE}.tar.gz \
     | tar xzOf - linux-${ARCHITECTURE}/helm > helm \
     && chmod +x helm
 
@@ -58,11 +59,11 @@ ARG KREW_VERSION
 RUN source .env \
     && apk add --virtual .krew-build-deps \
         git \
-    && curl -fsSL https://github.com/kubernetes-sigs/krew/releases/download/${KREW_VERSION}/krew-linux_${ARCHITECTURE}.tar.gz \
+    && curl -fsSL https://github.com/kubernetes-sigs/krew/releases/download/v${KREW_VERSION}/krew-linux_${ARCHITECTURE}.tar.gz \
     | tar xzOf - ./krew-linux_${ARCHITECTURE} > krew \
     && chmod +x krew \
     && export KREW_ROOT=/opt/krew \
-    && ./krew install --manifest-url=https://github.com/kubernetes-sigs/krew/releases/download/${KREW_VERSION}/krew.yaml \
+    && ./krew install --manifest-url=https://github.com/kubernetes-sigs/krew/releases/download/v${KREW_VERSION}/krew.yaml \
     && rm krew \
     && apk del .krew-build-deps
 
@@ -71,7 +72,7 @@ FROM build-env as kubectl
 ARG KUBECTL_VERSION
 
 RUN source .env \
-    && curl -fsSL https://dl.k8s.io/${KUBECTL_VERSION}/kubernetes-client-linux-${ARCHITECTURE}.tar.gz \
+    && curl -fsSL https://dl.k8s.io/v${KUBECTL_VERSION}/kubernetes-client-linux-${ARCHITECTURE}.tar.gz \
     | tar xzOf - kubernetes/client/bin/kubectl > kubectl \
     && chmod +x kubectl
 
@@ -80,7 +81,7 @@ FROM build-env as kustomize
 ARG KUSTOMIZE_VERSION
 
 RUN source .env \
-    && curl -fsSL https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2F${KUSTOMIZE_VERSION}/kustomize_${KUSTOMIZE_VERSION}_linux_${ARCHITECTURE}.tar.gz \
+    && curl -fsSL https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv${KUSTOMIZE_VERSION}/kustomize_v${KUSTOMIZE_VERSION}_linux_${ARCHITECTURE}.tar.gz \
     | tar xzOf - kustomize > kustomize \
     && chmod +x kustomize
 
@@ -89,11 +90,11 @@ FROM build-env as yq
 ARG YQ_VERSION
 
 RUN source .env \
-    && curl -fsSL https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_${ARCHITECTURE}.tar.gz \
+    && curl -fsSL https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_${ARCHITECTURE}.tar.gz \
     | tar xzOf - ./yq_linux_${ARCHITECTURE} > yq \
     && chmod +x yq
 
-FROM --platform=$BUILDPLATFORM scratch as target-scratch
+FROM alpine:${ALPINE_VERSION}
 
 COPY --link --from=argocd /build/argocd /usr/local/bin/argocd
 COPY --link --from=helm /build/helm /usr/local/bin/helm
@@ -104,9 +105,5 @@ COPY --link --from=kustomize /build/kustomize /usr/local/bin/kustomize
 COPY --link --from=yq /build/yq /usr/local/bin/yq
 
 COPY --link rootfs /
-
-FROM --platform=$BUILDPLATFORM alpine:$ALPINE_VERSION as target-alpine
-
-COPY --link --from=target-scratch / /
 
 ENV ENV /etc/profile
