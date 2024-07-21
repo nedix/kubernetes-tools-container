@@ -72,5 +72,40 @@
       matchPackagePatterns: [".*"],
       groupName: null,
     },
+    {
+      description: "Custom versioning for ...",
+      matchPackageNames: [""],
+      extractVersion: "^v(?<version>.*)$",
+    },
+    {
+      description: "Custom versioning for Argo CD",
+      matchPackageNames: ["argoproj/argo-cd"],
+      extractVersion: "^v(?<version>.*)$",
+    },
+    {
+      description: "Custom versioning for Helm",
+      matchPackageNames: ["helm/helm"],
+      extractVersion: "^v(?<version>.*)$",
+    },
+    {
+      description: "Custom versioning for Krew",
+      matchPackageNames: ["kubernetes-sigs/krew"],
+      extractVersion: "^v(?<version>.*)$",
+    },
+    {
+      description: "Custom versioning for Kubectl",
+      matchPackageNames: ["kubectl"],
+      extractVersion: "^v(?<version>.*)$",
+    },
+    {
+      description: "Custom versioning for Kustomize",
+      matchPackageNames: ["kubernetes-sigs/kustomize"],
+      extractVersion: "^v(?<version>.*)$",
+    },
+    {
+      description: "Custom versioning for YQ",
+      matchPackageNames: ["mikefarah/yq"],
+      extractVersion: "^v(?<version>.*)$",
+    },
   ],
 }
