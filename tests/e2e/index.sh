@@ -1,6 +1,16 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
+
+function test_runner() {
+    set -e
+    echo "Testing '${1##*/}'..."
+    docker run --rm -t test $@ > /dev/null
+    echo "Good exit from '${1##*/}'."
+}
+
+export -f test_runner
 
 ${0%/*}/argocd.sh
+${0%/*}/exporter.sh
 ${0%/*}/helm.sh
 ${0%/*}/kfilt.sh
 ${0%/*}/krew.sh

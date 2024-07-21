@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
-source "${0%/*}/_testcase.sh"
+#!/usr/bin/env sh
 
 test_runner argocd > /dev/null

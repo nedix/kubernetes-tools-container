@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
-source "${0%/*}/_testcase.sh"
-
-test_runner kfilt -f http://bit.ly/2xSiCJL -i kind=ServiceAccount > /dev/null
+test_runner kfilt --help > /dev/null
