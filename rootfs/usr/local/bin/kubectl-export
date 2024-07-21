@@ -1,0 +1,78 @@
+#!/usr/bin/env sh
+
+set -e
+
+if [ $# -lt 1 ] || [ "$@" =~ "--help" ]; then
+    echo "Usage: <command> [--namespace <namespace>] [--output <output_file>] [--release <helm_release>]"
+    echo "  <command>           : The command to execute. Choices: 'helm' and 'namespace'."
+    echo "  --namespace, -n     : Specify the namespace."
+    echo "  --release, -r       : Specify the Helm release. Required if the command is 'helm'."
+    echo "  --output, -o        : Specify the output file. Optional."
+    echo ""
+    exit
+fi
+
+COMMAND="$1"
+shift
+
+COMMAND_FILE="/opt/kubernetes-exporter/bin/${COMMAND}.sh"
+OUTPUT_FILE="/dev/stdout"
+
+if [ ! -x "$COMMAND_FILE" ]; then
+    echo "Invalid command: '${COMMAND}'." >&2
+    exit 1
+fi
+
+while [ $# -ge 1 ]; do
+    if echo "$1" | grep -q "="; then
+        VALUE="${1#*=}"
+    else
+        VALUE="$2"
+    fi
+
+    case "$1" in
+        --namespace*|-n*)
+            NAMESPACE="$VALUE"
+            ;;
+        --release*|-r*)
+            RELEASE_NAME="$VALUE"
+            ;;
+        --output*|-o*)
+            OUTPUT_FILE="$VALUE"
+            ;;
+        *)
+            echo "Invalid argument: '${1}'" >&2
+            exit 1
+            ;;
+    esac
+
+    if echo "$1" | grep -q "="; then
+        shift 1
+    else
+        shift 2
+    fi
+done
+
+if [ -n "$NAMESPACE" ]; then
+    kubectl config set-context --current --namespace="$NAMESPACE"
+else
+    echo "Error: --namespace argument is required." >&2
+    exit 1
+fi
+
+if [ "$COMMAND" = "namespace" ]; then
+    "$COMMAND_FILE" --namespace="$NAMESPACE" --output="$OUTPUT_FILE"
+    exit $?
+fi
+
+if [ "$COMMAND" = "helm" ]; then
+    if [ -z "$RELEASE_NAME" ]; then
+        echo "Error: --release argument is required." >&2
+        exit 1
+    fi
+
+    "$COMMAND_FILE" --namespace="$NAMESPACE" --release="$RELEASE_NAME" --output="$OUTPUT_FILE"
+    exit $?
+fi
+
+exit 1
