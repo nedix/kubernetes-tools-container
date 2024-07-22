@@ -1,6 +1,6 @@
 # kubernetes-tools-docker
 
-A container that contains commandline tools to work with Kubernetes resources.
+Commandline tools to work with Kubernetes resources.
 
 ## Usage
 
