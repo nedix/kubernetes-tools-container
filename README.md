@@ -9,7 +9,7 @@ Commandline tools to work with Kubernetes resources.
 ```shell
 docker run --pull always --rm --name kubernetes-tools \
     --mount type=bind,source=<path to kubeconfig>,target=/mnt/kubeconfig.yaml,ro \
-    ghcr.io/nedix/kubernetes-tools-docker
+    ghcr.io/nedix/kubernetes-tools-container
 ```
 
 **Use any of the commands**
