@@ -9,7 +9,7 @@ test_runner() {
     echo "Good exit from '${1##*/}'."
 }
 
-export -f test_runner
+export test_runner
 
 ${0%/*}/argocd.sh
 ${0%/*}/exporter.sh
