@@ -1,11 +1,6 @@
 {
-  baseBranches: [
-    "main",
-    "/^release\\/.*/",
-  ],
-  enabledManagers: [
-    "custom.regex",
-    "github-actions",
+  extends: [
+    "https://raw.githubusercontent.com/nedix/actions/main/renovate.json5",
   ],
   customManagers: [
     {
@@ -71,11 +66,6 @@
       description: "Disable grouping for all dependencies",
       matchPackagePatterns: [".*"],
       groupName: null,
-    },
-    {
-      description: "Custom versioning for ...",
-      matchPackageNames: [""],
-      extractVersion: "^v(?<version>.*)$",
     },
     {
       description: "Custom versioning for Argo CD",
