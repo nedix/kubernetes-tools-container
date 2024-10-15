@@ -1,4 +1,4 @@
-# kubernetes-tools-docker
+# kubernetes-tools-container
 
 Commandline tools to work with Kubernetes resources.
 
