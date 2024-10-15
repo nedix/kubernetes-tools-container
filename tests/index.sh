@@ -2,7 +2,7 @@
 
 docker build . -t test
 
-function test_runner() {
+test_runner() {
     set -e
     echo "Testing '${1##*/}'..."
     docker run --rm -t test $@ > /dev/null
