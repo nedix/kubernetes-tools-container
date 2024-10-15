@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+docker build . -t test
+
 function test_runner() {
     set -e
     echo "Testing '${1##*/}'..."
