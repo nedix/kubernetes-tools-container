@@ -1,5 +1,5 @@
 setup:
-	@docker build -f Containerfile -t kubernetes-tools .
+	@docker build --progress=plain -f Containerfile -t kubernetes-tools .
 
 run: KUBE_CONFIG_PATH := $(HOME)/.kube/config
 run:
