@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-test_runner yq > /dev/null
+yq > /dev/null

@@ -4,18 +4,22 @@ docker build -f Containerfile -t test .
 
 test_runner() {
     set -e
-    echo "Testing '${1##*/}'..."
-    docker run --rm -t test $@ > /dev/null
-    echo "Good exit from '${1##*/}'."
+    echo "Testing '$(basename ${1})'..."
+    docker run --rm --entrypoint /bin/sh test -c "$(cat ${@})"
+    echo "Good exit from '$(basename ${1})'."
 }
 
-export test_runner
+for SCRIPT_NAME in \
+    argocd.sh \
+    exporter.sh \
+    helm.sh \
+    kfilt.sh \
+    krew.sh \
+    kubectl.sh \
+    kustomize.sh \
+    yq.sh \
+; do
+    SCRIPT_PATH="$(dirname ${0})/${SCRIPT_NAME}"
 
-${0%/*}/argocd.sh
-${0%/*}/exporter.sh
-${0%/*}/helm.sh
-${0%/*}/kfilt.sh
-${0%/*}/krew.sh
-${0%/*}/kubectl.sh
-${0%/*}/kustomize.sh
-${0%/*}/yq.sh
+    test_runner "$SCRIPT_PATH"
+done
