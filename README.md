@@ -4,15 +4,15 @@ Commandline tools to work with Kubernetes manifests.
 
 ## Usage
 
-**Run the container**
+#### 1. Start a shell session
 
 ```shell
-docker run --pull always --rm --name kubernetes-tools \
+docker run --pull always --rm -it --name kubernetes-tools \
     --mount type=bind,source=<path to kubeconfig>,target=/mnt/kubeconfig.yaml,ro \
     nedix/kubernetes-tools
 ```
 
-**Use any of the commands**
+#### 2. Use any of the commands
 
 - `argocd`
 - `helm`
