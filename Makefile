@@ -1,5 +1,5 @@
 setup:
-	@docker build . -t kubernetes-tools
+	@docker build -f Containerfile -t kubernetes-tools .
 
 run: KUBE_CONFIG_PATH := $(HOME)/.kube/config
 run:
@@ -8,5 +8,4 @@ run:
 		kubernetes-tools
 
 test:
-	@$(MAKE) setup
-	@$(CURDIR)/tests/e2e/index.sh
+	@$(CURDIR)/tests/index.sh

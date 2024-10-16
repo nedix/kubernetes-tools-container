@@ -8,7 +8,7 @@ ARG KUBECTL_VERSION=1.30.3
 ARG KUSTOMIZE_VERSION=5.0.1
 ARG YQ_VERSION=4.44.2
 
-FROM alpine:${ALPINE_VERSION} as build-env
+FROM alpine:${ALPINE_VERSION} AS build-base
 
 ARG ARCHITECTURE
 
@@ -27,7 +27,7 @@ RUN test -n "$ARCHITECTURE" || case $(uname -m) in \
     && apk add --virtual .build-deps \
         curl
 
-FROM build-env as argocd
+FROM build-base AS argocd
 
 ARG ARGOCD_VERSION
 
@@ -35,7 +35,7 @@ RUN source .env \
     && curl -fsSL https://github.com/argoproj/argo-cd/releases/download/v${ARGOCD_VERSION}/argocd-linux-${ARCHITECTURE} -o argocd \
     && chmod +x argocd
 
-FROM build-env as helm
+FROM build-base AS helm
 
 ARG HELM_VERSION
 
@@ -44,7 +44,7 @@ RUN source .env \
     | tar xzOf - linux-${ARCHITECTURE}/helm > helm \
     && chmod +x helm
 
-FROM build-env as kfilt
+FROM build-base AS kfilt
 
 ARG KFILT_VERSION
 
@@ -52,7 +52,7 @@ RUN source .env \
     && curl -fsSL https://github.com/ryane/kfilt/releases/download/v${KFILT_VERSION}/kfilt_${KFILT_VERSION}_linux_${ARCHITECTURE} -o kfilt \
     && chmod +x kfilt
 
-FROM build-env as krew
+FROM build-base AS krew
 
 ARG KREW_VERSION
 
@@ -67,7 +67,7 @@ RUN source .env \
     && rm krew \
     && apk del .krew-build-deps
 
-FROM build-env as kubectl
+FROM build-base AS kubectl
 
 ARG KUBECTL_VERSION
 
@@ -76,7 +76,7 @@ RUN source .env \
     | tar xzOf - kubernetes/client/bin/kubectl > kubectl \
     && chmod +x kubectl
 
-FROM build-env as kustomize
+FROM build-base AS kustomize
 
 ARG KUSTOMIZE_VERSION
 
@@ -85,7 +85,7 @@ RUN source .env \
     | tar xzOf - kustomize > kustomize \
     && chmod +x kustomize
 
-FROM build-env as yq
+FROM build-base AS yq
 
 ARG YQ_VERSION
 
@@ -106,4 +106,4 @@ COPY --link --from=yq /build/yq /usr/local/bin/yq
 
 COPY --link rootfs /
 
-ENV ENV /etc/profile
+ENV ENV=/etc/profile
