@@ -1,6 +1,6 @@
 # [kubernetes-tools-container](https://github.com/nedix/kubernetes-tools-container)
 
-Commandline tools to work with Kubernetes manifests.
+Commandline tools to work with Kubernetes resources such as Helm charts and Kustomize manifests.
 
 ## Usage
 
