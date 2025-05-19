@@ -9,6 +9,7 @@ Commandline tools to work with Kubernetes resources such as Helm charts and Kust
 ```shell
 docker run --pull always --rm -it --name kubernetes-tools \
     --mount type=bind,source=<path to kubeconfig>,target=/mnt/kubeconfig.yaml,ro \
+    -v ${PWD}:/project/ \
     nedix/kubernetes-tools
 ```
 

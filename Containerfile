@@ -97,6 +97,8 @@ COPY --link --from=kubectl /build/kubectl /usr/local/bin/kubectl
 COPY --link --from=kustomize /build/kustomize /usr/local/bin/kustomize
 COPY --link --from=yq /build/yq /usr/local/bin/yq
 
-COPY --link rootfs /
+COPY --link /rootfs/ /
+
+WORKDIR /project/
 
 ENV ENV=/etc/profile
