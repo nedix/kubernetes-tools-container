@@ -1,4 +1,3 @@
-ARG ARCHITECTURE
 ARG ALPINE_VERSION=3.21
 ARG ARGOCD_VERSION=3.0.1
 ARG HELM_VERSION=3.17.3
@@ -10,17 +9,11 @@ ARG YQ_VERSION=4.45.4
 
 FROM alpine:${ALPINE_VERSION} AS build-base
 
-ARG ARCHITECTURE
-
 WORKDIR /build
 
-RUN test -n "$ARCHITECTURE" || case $(uname -m) in \
-        aarch64) ARCHITECTURE=arm64; ;; \
-        amd64) ARCHITECTURE=amd64; ;; \
-        arm64) ARCHITECTURE=arm64; ;; \
-        armv8b) ARCHITECTURE=arm64; ;; \
-        armv8l) ARCHITECTURE=arm64; ;; \
-        x86_64) ARCHITECTURE=amd64; ;; \
+RUN case $(uname -m) in \
+        aarch64|arm64|armv8b|armv8l) ARCHITECTURE=arm64; ;; \
+        amd64|x86_64) ARCHITECTURE=amd64; ;; \
         *) echo "Unsupported architecture, exiting..."; exit 1; ;; \
     esac \
     && echo "ARCHITECTURE=$ARCHITECTURE" >> .env \
