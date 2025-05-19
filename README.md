@@ -7,8 +7,20 @@ Commandline tools to work with Kubernetes resources such as Helm charts and Kust
 #### 1. Start a shell session
 
 ```shell
+CONFIG_PATH="${HOME}/.kube/config"
+```
+
+OR
+
+```shell
+CONFIG_PATH="${PWD}/kubeconfig.yaml"
+```
+
+AND
+
+```shell
 docker run --pull always --rm -it --name kubernetes-tools \
-    --mount type=bind,source=<path to kubeconfig>,target=/mnt/kubeconfig.yaml,ro \
+    --mount "type=bind,source=${CONFIG_PATH},target=/mnt/kubeconfig.yaml,ro" \
     -v ${PWD}:/project/ \
     nedix/kubernetes-tools
 ```
