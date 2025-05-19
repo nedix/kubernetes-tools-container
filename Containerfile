@@ -89,6 +89,9 @@ RUN source .env \
 
 FROM alpine:${ALPINE_VERSION}
 
+RUN apk add \
+        inotify-tools
+
 COPY --link --from=argocd /build/argocd /usr/local/bin/argocd
 COPY --link --from=helm /build/helm /usr/local/bin/helm
 COPY --link --from=kfilt /build/kfilt /usr/local/bin/kfilt
