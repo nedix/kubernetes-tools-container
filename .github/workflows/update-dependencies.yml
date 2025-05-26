@@ -17,4 +17,4 @@ jobs:
     steps:
       - id: update-dependencies
         name: Update dependencies
-        uses: nedix/actions/update-dependencies@v0.9.29
+        uses: nedix/actions/update-dependencies@v0.9.33
