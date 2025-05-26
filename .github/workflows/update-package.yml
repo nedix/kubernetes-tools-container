@@ -4,10 +4,10 @@ on:
   push:
     tags: ['*']
 
+permissions:
+  id-token: write
+
 jobs:
-  deploy:
-    permissions:
-      id-token: write
   update-package:
     name: Update package
     runs-on: ubuntu-latest
