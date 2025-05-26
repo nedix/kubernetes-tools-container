@@ -5,10 +5,10 @@ on:
     tags: ['*']
 
 permissions:
-  actions: read
   attestations: write
   id-token: write
   packages: write
+  security-events: write
 
 jobs:
   update-package:
