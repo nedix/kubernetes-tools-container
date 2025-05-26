@@ -5,6 +5,9 @@ on:
     tags: ['*']
 
 jobs:
+  deploy:
+    permissions:
+      id-token: write
   update-package:
     name: Update package
     runs-on: ubuntu-latest
