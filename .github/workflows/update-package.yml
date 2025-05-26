@@ -5,8 +5,8 @@ on:
     tags: ['*']
 
 permissions:
+  actions: read
   attestations: write
-  contents: read
   id-token: write
   packages: write
 
