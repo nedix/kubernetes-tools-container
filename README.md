@@ -6,7 +6,7 @@ Commandline tools to work with Kubernetes resources such as Helm charts and Kust
 ## Usage
 
 
-### 1. Start a shell session
+### 1. Prepare the Kubernetes config file
 
 ```shell
 CONFIG_PATH="${HOME}/.kube/config"
@@ -18,7 +18,8 @@ OR
 CONFIG_PATH="${PWD}/kubeconfig.yaml"
 ```
 
-AND
+
+### 2. Start a shell session
 
 ```shell
 docker run --rm -it --pull always --name kubernetes-tools \
@@ -28,7 +29,7 @@ docker run --rm -it --pull always --name kubernetes-tools \
 ```
 
 
-### 2. Use any of the commands
+### 3. Use any of the commands
 
 - `argocd`
 - `helm`
