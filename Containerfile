@@ -1,5 +1,5 @@
 ARG ALPINE_VERSION=3.22
-ARG ARGOCD_VERSION=3.0.6
+ARG ARGO_CD_VERSION=3.0.6
 ARG HELM_VERSION=3.18.2
 ARG KFILT_VERSION=0.0.8
 ARG KREW_VERSION=0.4.5
@@ -22,10 +22,10 @@ RUN case $(uname -m) in \
 
 FROM build-base AS argocd
 
-ARG ARGOCD_VERSION
+ARG ARGO_CD_VERSION
 
 RUN source .env \
-    && curl -fsSL https://github.com/argoproj/argo-cd/releases/download/v${ARGOCD_VERSION}/argocd-linux-${ARCHITECTURE} -o argocd \
+    && curl -fsSL https://github.com/argoproj/argo-cd/releases/download/v${ARGO_CD_VERSION}/argocd-linux-${ARCHITECTURE} -o argocd \
     && chmod +x argocd
 
 FROM build-base AS helm

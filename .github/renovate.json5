@@ -13,7 +13,7 @@
     {
       depNameTemplate: "Argo CD",
       fileMatch: ["^Containerfile$"],
-      matchStrings: ["ARG ARGOCD_VERSION=(?<currentValue>.*?)\\n"],
+      matchStrings: ["ARG ARGO_CD_VERSION=(?<currentValue>.*?)\\n"],
       datasourceTemplate: "github-releases",
       packageNameTemplate: "argoproj/argo-cd",
     },
