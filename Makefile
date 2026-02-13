@@ -3,8 +3,10 @@ setup:
 
 shell: KUBE_CONFIG_PATH = "$(HOME)/.kube/config"
 shell:
-	@docker run --rm -it \
+	@docker run \
 		--mount "type=bind,source=$(KUBE_CONFIG_PATH),target=/mnt/kubeconfig.yaml,readonly" \
+		--rm \
+		-it \
 		kubernetes-tools
 
 test:

@@ -22,9 +22,14 @@ CONFIG_PATH="${PWD}/kubeconfig.yaml"
 ### 2. Start a shell session
 
 ```shell
-docker run --rm -it --pull always --name kubernetes-tools \
+docker run \
     --mount "type=bind,source=${CONFIG_PATH},target=/mnt/kubeconfig.yaml,ro" \
-    -v ${PWD}:/project/ \
+    --name kubernetes-tools \
+    --pull always \
+    --rm \
+    -i \
+    -t \
+    -v "${PWD}:/project/" \
     nedix/kubernetes-tools
 ```
 
