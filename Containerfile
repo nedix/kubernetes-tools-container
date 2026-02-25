@@ -11,10 +11,14 @@ FROM alpine:${ALPINE_VERSION} AS build-base
 
 WORKDIR /build
 
-RUN case $(uname -m) in \
-        aarch64|arm*) ARCHITECTURE=arm64; ;; \
-        amd64|x86_64) ARCHITECTURE=amd64; ;; \
-        *) echo "Unsupported architecture, exiting..."; exit 1; ;; \
+RUN case "$(uname -m)" in \
+        aarch64) \
+            ARCHITECTURE="arm64" \
+        ;; arm*) \
+            ARCHITECTURE="arm64" \
+        ;; x86_64) \
+            ARCHITECTURE="amd64" \
+        ;; *) echo "Unsupported architecture: $(uname -m)"; exit 1; ;; \
     esac \
     && echo "ARCHITECTURE=$ARCHITECTURE" >> .env \
     && apk add --virtual .build-deps \
