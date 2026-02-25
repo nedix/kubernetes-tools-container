@@ -73,6 +73,11 @@
       extractVersion: "^v(?<version>.*)$",
     },
     {
+      description: "Custom versioning for kfilt",
+      matchPackageNames: ["ryane/kfilt"],
+      extractVersion: "^v(?<version>.*)$",
+    },
+    {
       description: "Custom versioning for Krew",
       matchPackageNames: ["kubernetes-sigs/krew"],
       extractVersion: "^v(?<version>.*)$",
