@@ -42,7 +42,7 @@ FROM build-base AS kfilt
 ARG KFILT_VERSION
 
 RUN source .env \
-    && curl -fsSL https://github.com/ryane/kfilt/releases/download/v${KFILT_VERSION}/kfilt_${KFILT_VERSION}_linux_${ARCHITECTURE} -o kfilt \
+    && curl -fsSL "https://github.com/ryane/kfilt/releases/download/v${KFILT_VERSION}/kfilt_linux_${ARCHITECTURE}" -o kfilt \
     && chmod +x kfilt
 
 FROM build-base AS krew
