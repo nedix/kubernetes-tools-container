@@ -55,7 +55,7 @@ FROM build-base AS krew
 
 WORKDIR /build/krew/
 
-ENV KREW_ROOT=/opt/krew
+ENV KREW_ROOT="/opt/krew"
 
 ARG KREW_VERSION
 
@@ -105,7 +105,6 @@ RUN . /.env \
 FROM alpine:${ALPINE_VERSION}
 
 RUN apk add \
-        git \
         inotify-tools
 
 COPY --link --from=argocd /build/argocd/argocd /usr/local/bin/argocd
