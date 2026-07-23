@@ -42,6 +42,7 @@ docker run \
 - `kubectl`
 - `kubectl export`
 - `kubectl krew`
+- `kubectl neat`
 - `kustomize`
 - `yq`
 
