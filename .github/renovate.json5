@@ -101,6 +101,11 @@
       extractVersion: "^v(?<version>.*)$",
     },
     {
+      description: "Custom versioning for Neat",
+      matchPackageNames: ["itaysk/kubectl-neat"],
+      extractVersion: "^v(?<version>.*)$",
+    },
+    {
       description: "Custom versioning for YQ",
       matchPackageNames: ["mikefarah/yq"],
       extractVersion: "^v(?<version>.*)$",
