@@ -5,6 +5,7 @@ ARG KFILT_VERSION=1.0.0
 ARG KREW_VERSION=0.5.0
 ARG KUBECTL_VERSION=1.36.3
 ARG KUSTOMIZE_VERSION=5.0.1
+ARG NEAT_VERSION=2.0.3
 ARG YQ_VERSION=4.53.3
 
 FROM ghcr.io/nedix/alpine-base-container:${ALPINE_VERSION} AS base
@@ -91,6 +92,17 @@ RUN . /.env \
     | tar xzOf - kustomize > kustomize \
     && chmod +x kustomize
 
+FROM build-base AS neat
+
+WORKDIR /build/neat/
+
+ARG NEAT_VERSION
+
+RUN . /.env \
+    && wget -qO- "https://github.com/itaysk/kubectl-neat/releases/download/v${NEAT_VERSION}/kubectl-neat_linux_${ARCHITECTURE}.tar.gz" \
+    | tar xzOf - kubectl-neat > kubectl-neat \
+    && chmod +x kubectl-neat
+
 FROM build-base AS yq
 
 WORKDIR /build/yq/
@@ -113,13 +125,12 @@ COPY --link --from=kfilt /build/kfilt/kfilt /usr/local/bin/kfilt
 COPY --link --from=krew /opt/krew /opt/krew
 COPY --link --from=kubectl /build/kubectl/kubectl /usr/local/bin/kubectl
 COPY --link --from=kustomize /build/kustomize/kustomize /usr/local/bin/kustomize
+COPY --link --from=neat /build/neat/kubectl-neat /usr/local/bin/kubectl-neat
 COPY --link --from=yq /build/yq/yq /usr/local/bin/yq
 
 COPY --link /rootfs/ /
 
 ENV ENV="/etc/profile"
 ENV KREW_ROOT="/opt/krew"
-
-RUN kubectl krew install neat
 
 WORKDIR /project/

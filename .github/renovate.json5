@@ -55,6 +55,13 @@
       packageNameTemplate: "kubernetes-sigs/kustomize",
     },
     {
+      depNameTemplate: "Neat",
+      fileMatch: ["^Containerfile$"],
+      matchStrings: ["ARG NEAT_VERSION=(?<currentValue>.*?)\\n"],
+      datasourceTemplate: "github-releases",
+      packageNameTemplate: "itaysk/kubectl-neat",
+    },
+    {
       depNameTemplate: "YQ",
       fileMatch: ["^Containerfile$"],
       matchStrings: ["ARG YQ_VERSION=(?<currentValue>.*?)\\n"],
