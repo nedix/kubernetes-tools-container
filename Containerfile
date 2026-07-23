@@ -12,6 +12,8 @@ FROM ghcr.io/nedix/alpine-base-container:${ALPINE_VERSION} AS base
 
 FROM base AS build-base
 
+WORKDIR /build/
+
 RUN case "$(uname -m)" in \
         aarch64|arm*) \
             ARCHITECTURE="arm64" \
@@ -19,7 +21,7 @@ RUN case "$(uname -m)" in \
             ARCHITECTURE="amd64" \
         ;; *) echo "Unsupported architecture: $(uname -m)"; exit 1; ;; \
     esac \
-    && echo "ARCHITECTURE=$ARCHITECTURE" >> /.env
+    && echo "ARCHITECTURE=$ARCHITECTURE" >> .env
 
 FROM build-base AS argocd
 
@@ -27,7 +29,7 @@ WORKDIR /build/argocd/
 
 ARG ARGO_CD_VERSION
 
-RUN . /.env \
+RUN . /build/.env \
     && wget -qo argocd "https://github.com/argoproj/argo-cd/releases/download/v${ARGO_CD_VERSION}/argocd-linux-${ARCHITECTURE}" \
     && chmod +x argocd
 
@@ -37,7 +39,7 @@ WORKDIR /build/helm/
 
 ARG HELM_VERSION
 
-RUN . /.env \
+RUN . /build/.env \
     && wget -qO- "https://get.helm.sh/helm-v${HELM_VERSION}-linux-${ARCHITECTURE}.tar.gz" \
     | tar xzOf - linux-${ARCHITECTURE}/helm > helm \
     && chmod +x helm
@@ -48,7 +50,7 @@ WORKDIR /build/kfilt/
 
 ARG KFILT_VERSION
 
-RUN . /.env \
+RUN . /build/.env \
     && wget -qo kfilt "https://github.com/ryane/kfilt/releases/download/v${KFILT_VERSION}/kfilt_linux_${ARCHITECTURE}" \
     && chmod +x kfilt
 
@@ -60,7 +62,7 @@ ENV KREW_ROOT="/opt/krew"
 
 ARG KREW_VERSION
 
-RUN . /.env \
+RUN . /build/.env \
     && apk add --virtual .krew-build-deps \
         git \
     && wget -qO- "https://github.com/kubernetes-sigs/krew/releases/download/v${KREW_VERSION}/krew-linux_${ARCHITECTURE}.tar.gz" \
@@ -76,7 +78,7 @@ WORKDIR /build/kubectl/
 
 ARG KUBECTL_VERSION
 
-RUN . /.env \
+RUN . /build/.env \
     && wget -qO- "https://dl.k8s.io/v${KUBECTL_VERSION}/kubernetes-client-linux-${ARCHITECTURE}.tar.gz" \
     | tar xzOf - kubernetes/client/bin/kubectl > kubectl \
     && chmod +x kubectl
@@ -87,7 +89,7 @@ WORKDIR /build/kustomize/
 
 ARG KUSTOMIZE_VERSION
 
-RUN . /.env \
+RUN . /build/.env \
     && wget -qO- "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv${KUSTOMIZE_VERSION}/kustomize_v${KUSTOMIZE_VERSION}_linux_${ARCHITECTURE}.tar.gz" \
     | tar xzOf - kustomize > kustomize \
     && chmod +x kustomize
@@ -98,7 +100,7 @@ WORKDIR /build/neat/
 
 ARG NEAT_VERSION
 
-RUN . /.env \
+RUN . /build/.env \
     && wget -qO- "https://github.com/itaysk/kubectl-neat/releases/download/v${NEAT_VERSION}/kubectl-neat_linux_${ARCHITECTURE}.tar.gz" \
     | tar xzOf - kubectl-neat > kubectl-neat \
     && chmod +x kubectl-neat
@@ -109,7 +111,7 @@ WORKDIR /build/yq/
 
 ARG YQ_VERSION
 
-RUN . /.env \
+RUN . /build/.env \
     && wget -qO- "https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_${ARCHITECTURE}.tar.gz" \
     | tar xzOf - ./yq_linux_${ARCHITECTURE} > yq \
     && chmod +x yq
