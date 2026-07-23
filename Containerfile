@@ -114,7 +114,7 @@ RUN . /.env \
     | tar xzOf - ./yq_linux_${ARCHITECTURE} > yq \
     && chmod +x yq
 
-FROM alpine:${ALPINE_VERSION}
+FROM base
 
 RUN apk add \
         inotify-tools
