@@ -4,9 +4,9 @@ if [ ! -e /mnt/kubeconfig.yaml ]; then
     return
 fi
 
-sync-kubeconfig() {
-    mkdir -p ~/.kube/
+mkdir -p ~/.kube/
 
+sync-kubeconfig() {
     CLUSTER_INDEX=0
     KUBERNETES_CONFIG="$(cat /mnt/kubeconfig.yaml)"
 
