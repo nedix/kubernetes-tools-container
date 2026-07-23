@@ -1,11 +1,11 @@
 #!/usr/bin/env sh
 
+if [ ! -e /mnt/kubeconfig.yaml ]; then
+    return
+fi
+
 sync-kubeconfig() {
     mkdir -p ~/.kube/
-
-    if [ ! -e /mnt/kubeconfig.yaml ]; then
-        return
-    fi
 
     CLUSTER_INDEX=0
     KUBERNETES_CONFIG="$(cat /mnt/kubeconfig.yaml)"
