@@ -11,10 +11,11 @@ test_runner() {
 
 for SCRIPT_NAME in \
     argocd.sh \
-    exporter.sh \
     helm.sh \
     kfilt.sh \
-    krew.sh \
+    kubectl-export.sh \
+    kubectl-krew.sh \
+    kubectl-neat.sh \
     kubectl.sh \
     kustomize.sh \
     yq.sh \
