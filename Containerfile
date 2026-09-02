@@ -130,7 +130,7 @@ COPY --link --from=kustomize /build/kustomize/kustomize /usr/local/bin/kustomize
 COPY --link --from=neat /build/neat/kubectl-neat /usr/local/bin/kubectl-neat
 COPY --link --from=yq /build/yq/yq /usr/local/bin/yq
 
-COPY --link /rootfs/ /
+COPY /rootfs/ /
 
 ENV ENV="/etc/profile"
 ENV KREW_ROOT="/opt/krew"
