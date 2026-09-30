@@ -48,8 +48,3 @@ sync-kubeconfig() {
 }
 
 sync-kubeconfig
-
-inotifywait -e create,modify -m /mnt/kubeconfig.yaml -qq \
-| while read -r _; do
-    sync-kubeconfig
-done &
