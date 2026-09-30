@@ -1,6 +1,11 @@
 KUBE_CONFIG_DIR := "$(HOME)/.kube"
 KUBE_CONFIG_PATH := "$(KUBE_CONFIG_DIR)/config"
 
+ifneq ($(wildcard $(PWD)/kubeconfig.yaml),)
+KUBE_CONFIG_DIR := "$(PWD)"
+KUBE_CONFIG_PATH := "$(PWD)/kubeconfig.yaml"
+endif
+
 setup:
 	@mkdir -p "$(KUBE_CONFIG_DIR)"
 	@touch "$(KUBE_CONFIG_PATH)"

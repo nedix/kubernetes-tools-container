@@ -6,7 +6,7 @@ Commandline tools to work with Kubernetes resources such as Helm charts and Kust
 ## Usage
 
 
-### 1. Prepare the Kubernetes config file
+### 1. Set the `KUBERNETES_CONFIG_PATH` variable to your Kubernetes config path
 
 ```shell
 KUBERNETES_CONFIG_PATH="${HOME}/.kube/config"
@@ -24,7 +24,6 @@ KUBERNETES_CONFIG_PATH="${PWD}/kubeconfig.yaml"
 ```shell
 docker run \
     --mount "type=bind,source=${KUBERNETES_CONFIG_PATH},target=/mnt/kubeconfig.yaml,ro" \
-    --name kubernetes-tools \
     --pull always \
     --rm \
     -i \
