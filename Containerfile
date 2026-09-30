@@ -124,7 +124,7 @@ RUN apk add \
 COPY --link --from=argocd /build/argocd/argocd /usr/local/bin/argocd
 COPY --link --from=helm /build/helm/helm /usr/local/bin/helm
 COPY --link --from=kfilt /build/kfilt/kfilt /usr/local/bin/kfilt
-COPY --link --from=krew /opt/krew /opt/krew
+COPY --link --from=krew /opt/krew/ /opt/krew/
 COPY --link --from=kubectl /build/kubectl/kubectl /usr/local/bin/kubectl
 COPY --link --from=kustomize /build/kustomize/kustomize /usr/local/bin/kustomize
 COPY --link --from=neat /build/neat/kubectl-neat /usr/local/bin/kubectl-neat
