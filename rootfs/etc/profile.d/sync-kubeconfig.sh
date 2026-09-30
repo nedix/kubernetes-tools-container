@@ -5,8 +5,6 @@ if [ ! -e /mnt/kubeconfig.yaml ]; then
     exit 1
 fi
 
-mkdir -p "${HOME}/.kube/"
-
 CLUSTER_INDEX=0
 KUBERNETES_CONFIG="$(cat /mnt/kubeconfig.yaml)"
 
@@ -42,5 +40,7 @@ while [ "$CLUSTER_INDEX" -lt "$(echo "$KUBERNETES_CONFIG" | yq '.clusters | leng
 
     CLUSTER_INDEX="$(( CLUSTER_INDEX + 1 ))"
 done
+
+mkdir -p "${HOME}/.kube/"
 
 echo "$KUBERNETES_CONFIG" > "${HOME}/.kube/config"
