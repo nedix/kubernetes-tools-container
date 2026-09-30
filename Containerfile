@@ -118,6 +118,9 @@ RUN . /build/.env \
 
 FROM base
 
+RUN apk add \
+        git
+
 COPY --link --from=argocd /build/argocd/argocd /usr/local/bin/argocd
 COPY --link --from=helm /build/helm/helm /usr/local/bin/helm
 COPY --link --from=kfilt /build/kfilt/kfilt /usr/local/bin/kfilt
