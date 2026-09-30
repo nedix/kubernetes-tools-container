@@ -33,9 +33,9 @@ sync-kubeconfig() {
         if (! nc -z "$SERVER_IP" "$SERVER_PORT" && nc -z "host.docker.internal" "$SERVER_PORT") 1> /dev/null 2> /dev/null; then
             KUBERNETES_CONFIG=$(
                 echo "$KUBERNETES_CONFIG" \
-                | yq ".clusters[${CLUSTER_INDEX}].cluster.server |= sub(\"${SERVER_IP}\", \"host.docker.internal\")" \
                 | yq ".clusters[${CLUSTER_INDEX}].cluster |= del(.certificate-authority-data)" \
                 | yq ".clusters[${CLUSTER_INDEX}].cluster.insecure-skip-tls-verify = true" \
+                | yq ".clusters[${CLUSTER_INDEX}].cluster.server |= sub(\"${SERVER_IP}\", \"host.docker.internal\")" \
             )
 
             echo "INFO: Patched cluster #${CLUSTER_INDEX}."
